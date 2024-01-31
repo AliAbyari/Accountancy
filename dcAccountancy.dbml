@@ -1,0 +1,949 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="Accountancy" Class="dcAccountancyDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=.;Initial Catalog=Accountancy;Integrated Security=True" SettingsObjectName="Accountancy.Properties.Settings" SettingsPropertyName="AccountancyConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.Setting" Member="Settings">
+    <Type Name="Setting" Id="ID1" Modifier="Sealed">
+      <Column Name="SettingId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="CompanyName" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="FactorAddress" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="FactorTel" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
+      <Column Name="InvoiceAddress" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="InvoiceTel" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
+      <Column Name="SmsUser" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
+      <Column Name="SmsPass" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
+      <Column Name="SmsSender" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
+      <Column Name="UserMobile" Type="System.String" DbType="NVarChar(11)" CanBeNull="true" />
+      <Column Name="BankSend" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="FactorSend" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="Alarm1" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Alarm2" Type="System.Int32" DbType="Int" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Roles" Member="Roles">
+    <Type Name="Role" Id="ID2" Modifier="Sealed">
+      <Column Name="RoleId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="RoleName" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="DepotPermission" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="BankPermission" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="PersonPermission" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="FactorPermission" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="SettingPermission" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="UserPermission" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Association Name="Role_User" Member="Users" ThisKey="RoleId" OtherKey="RoleId" Type="User" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Users" Member="Users">
+    <Type Name="User" Id="ID3" Modifier="Sealed">
+      <Column Name="UserId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="RoleId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="LoginUser" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
+      <Column Name="LoginPass" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
+      <Association Name="User_Log" Member="Logs" ThisKey="UserId" OtherKey="UserId" Type="Log" />
+      <Association Name="Role_User" Member="Role" ThisKey="RoleId" OtherKey="RoleId" Type="Role" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Logs" Member="Logs">
+    <Type Name="Log" Id="ID4" Modifier="Sealed">
+      <Column Name="LogId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="UserId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="LogIn" Type="System.String" DbType="NVarChar(30)" CanBeNull="true" />
+      <Column Name="LogOut" Type="System.String" DbType="NVarChar(30)" CanBeNull="true" />
+      <Association Name="User_Log" Member="User" ThisKey="UserId" OtherKey="UserId" Type="User" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Depot" Member="Depots">
+    <Type Name="Depot" Id="ID5" Modifier="Sealed">
+      <Column Name="DepotId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="DepotName" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Association Name="Depot_Stock" Member="Stocks" ThisKey="DepotId" OtherKey="DepotId" Type="Stock" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Groups" Member="Groups">
+    <Type Name="Group" Id="ID6" Modifier="Sealed">
+      <Column Name="GroupId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="GroupName" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="GroupUnit1" Type="System.String" DbType="NVarChar(30)" CanBeNull="true" />
+      <Column Name="GroupUnit2" Type="System.String" DbType="NVarChar(30)" CanBeNull="true" />
+      <Association Name="Group_Product" Member="Products" ThisKey="GroupId" OtherKey="GroupId" Type="Product" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Products" Member="Products">
+    <Type Name="Product" Id="ID7" Modifier="Sealed">
+      <Column Name="ProductId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="GroupId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ProductName" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="ProductSize" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="ProductDefaultPrice" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ProductDes" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="ProductAlarm" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="Product_Stock" Member="Stocks" ThisKey="ProductId" OtherKey="ProductId" Type="Stock" />
+      <Association Name="Product_Detail" Member="Details" ThisKey="ProductId" OtherKey="ProductId" Type="Detail" />
+      <Association Name="Group_Product" Member="Group" ThisKey="GroupId" OtherKey="GroupId" Type="Group" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.People" Member="Peoples">
+    <Type Name="People" Id="ID8" Modifier="Sealed">
+      <Column Name="PersonId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="PersonName" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="PersonTel" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
+      <Column Name="PersonMobile" Type="System.String" DbType="NVarChar(11)" CanBeNull="true" />
+      <Column Name="PersonDebtor" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="PersonCreditor" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="People_Factor" Member="Factors" ThisKey="PersonId" OtherKey="PersonId" Type="Factor" />
+    </Type>
+  </Table>
+  <Table Name="dbo.CostGroups" Member="CostGroups">
+    <Type Name="CostGroup" Id="ID9" Modifier="Sealed">
+      <Column Name="CostGroupId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="CostGroupType" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="CostStatic" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="CostGroupName" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="CostGroupDes" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Association Name="CostGroup_Book" Member="Books" ThisKey="CostGroupId" OtherKey="CostGroupId" Type="Book" />
+      <Association Name="CostGroup_Document" Member="Documents" ThisKey="CostGroupId" OtherKey="CostGroupId" Type="Document" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Bank" Member="Banks">
+    <Type Name="Bank" Id="ID10" Modifier="Sealed">
+      <Column Name="BankId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="BankName" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="BankNumber" Type="System.String" DbType="NVarChar(30)" CanBeNull="true" />
+      <Column Name="BankPerson" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="BankType" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Association Name="Bank_Book" Member="Books" ThisKey="BankId" OtherKey="BankId" Type="Book" />
+      <Association Name="Bank_Document" Member="Documents" ThisKey="BankId" OtherKey="BankId" Type="Document" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Book" Member="Books">
+    <Type Name="Book" Id="ID11" Modifier="Sealed">
+      <Column Name="BookId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="BankId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="CostGroupId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="PersonId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="BookDate" Type="System.String" DbType="NVarChar(10)" CanBeNull="true" />
+      <Column Name="BookTime" Type="System.String" DbType="NVarChar(10)" CanBeNull="true" />
+      <Column Name="BookDes" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="BookPrice" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="Bank_Book" Member="Bank" ThisKey="BankId" OtherKey="BankId" Type="Bank" IsForeignKey="true" />
+      <Association Name="CostGroup_Book" Member="CostGroup" ThisKey="CostGroupId" OtherKey="CostGroupId" Type="CostGroup" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Documents" Member="Documents">
+    <Type Name="Document" Id="ID12" Modifier="Sealed">
+      <Column Name="DocumentId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="BankId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="CostGroupId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="PersonId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="DocumentDate1" Type="System.String" DbType="NVarChar(10)" CanBeNull="true" />
+      <Column Name="DocumentDate2" Type="System.String" DbType="NVarChar(10)" CanBeNull="true" />
+      <Column Name="DocumentNumber" Type="System.String" DbType="NVarChar(30)" CanBeNull="true" />
+      <Column Name="DocumentDes" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="DocumentPrice" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="DocumentOk" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Association Name="Bank_Document" Member="Bank" ThisKey="BankId" OtherKey="BankId" Type="Bank" IsForeignKey="true" />
+      <Association Name="CostGroup_Document" Member="CostGroup" ThisKey="CostGroupId" OtherKey="CostGroupId" Type="CostGroup" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Tax" Member="Taxes">
+    <Type Name="Tax" Id="ID13" Modifier="Sealed">
+      <Column Name="TaxId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="TaxBuy" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="TaxSale" Type="System.Double" DbType="Float" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Stocks" Member="Stocks">
+    <Type Name="Stock" Id="ID14" Modifier="Sealed">
+      <Column Name="StockId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="FactorId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="DepotId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ProductId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="StockDate" Type="System.String" DbType="NVarChar(10)" CanBeNull="true" />
+      <Column Name="StockDes" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="StockIn" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="StockOut" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="Depot_Stock" Member="Depot" ThisKey="DepotId" OtherKey="DepotId" Type="Depot" IsForeignKey="true" />
+      <Association Name="Product_Stock" Member="Product" ThisKey="ProductId" OtherKey="ProductId" Type="Product" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ViewStocks" Member="ViewStocks">
+    <Type Name="ViewStock" Id="ID15" Modifier="Sealed">
+      <Column Name="ProductId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="GroupId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="GroupName" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="GroupUnit1" Type="System.String" DbType="NVarChar(30)" CanBeNull="true" />
+      <Column Name="GroupUnit2" Type="System.String" DbType="NVarChar(30)" CanBeNull="true" />
+      <Column Name="ProductName" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="ProductSize" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="ProductDefaultPrice" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ProductAlarm" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SumStockIn" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SumStockOut" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SumStocks" Type="System.Int32" DbType="Int" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Factors" Member="Factors">
+    <Type Name="Factor" Id="ID16" Modifier="Sealed">
+      <Column Name="FactorId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="PersonId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="FactorType" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="FactorNumber" Type="System.String" DbType="NVarChar(10)" CanBeNull="true" />
+      <Column Name="FactorDate" Type="System.String" DbType="NVarChar(10)" CanBeNull="true" />
+      <Column Name="FactorPrice" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="FactorDefaultTax" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="FactorTaxPrice" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="FactorServicePrice" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="FactorCutPrice" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="FactorSumPrice" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="Factor_Detail" Member="Details" ThisKey="FactorId" OtherKey="FactorId" Type="Detail" />
+      <Association Name="People_Factor" Member="People" ThisKey="PersonId" OtherKey="PersonId" Type="People" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Details" Member="Details">
+    <Type Name="Detail" Modifier="Sealed">
+      <Column Name="DetailId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="FactorId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ProductId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="DepotId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="DetailValue1" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="DetailValue2" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="DefaultPrice" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="DetailPrice" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="DetailExit" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Association Name="Factor_Detail" Member="Factor" ThisKey="FactorId" OtherKey="FactorId" Type="Factor" IsForeignKey="true" />
+      <Association Name="Product_Detail" Member="Product" ThisKey="ProductId" OtherKey="ProductId" Type="Product" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ViewFactorDetails" Member="ViewFactorDetails">
+    <Type Name="ViewFactorDetail" Id="ID17" Modifier="Sealed">
+      <Column Name="DetailId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="FactorId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ProductId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="DepotId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="PersonId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="GroupId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="FactorType" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="FactorNumber" Type="System.String" DbType="NVarChar(10)" CanBeNull="true" />
+      <Column Name="FactorDate" Type="System.String" DbType="NVarChar(10)" CanBeNull="true" />
+      <Column Name="FactorPrice" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="FactorDefaultTax" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="FactorTaxPrice" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="FactorServicePrice" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="FactorCutPrice" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="FactorSumPrice" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="DetailValue1" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="DetailValue2" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="DefaultPrice" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="DetailPrice" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="DetailExit" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="ProductName" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="ProductSize" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="ProductDefaultPrice" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="GroupName" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="GroupUnit1" Type="System.String" DbType="NVarChar(30)" CanBeNull="true" />
+      <Column Name="GroupUnit2" Type="System.String" DbType="NVarChar(30)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Messages" Member="Messages">
+    <Type Name="Message" Id="ID18" Modifier="Sealed">
+      <Column Name="MessageId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="MessageText" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ViewFactors" Member="ViewFactors">
+    <Type Name="ViewFactor" Id="ID19" Modifier="Sealed">
+      <Column Name="FactorId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PersonId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="PersonName" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="PersonMobile" Type="System.String" DbType="NVarChar(11)" CanBeNull="true" />
+      <Column Name="FactorType" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="FactorNumber" Type="System.String" DbType="NVarChar(10)" CanBeNull="true" />
+      <Column Name="FactorDate" Type="System.String" DbType="NVarChar(10)" CanBeNull="true" />
+      <Column Name="FactorSumPrice" Type="System.Int32" DbType="Int" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Function Name="dbo.ExistsSetting" Method="ExistsSetting">
+    <Parameter Name="Exists" Parameter="exists" Type="System.Boolean" DbType="Bit" Direction="InOut" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.FillSetting" Method="FillSetting">
+    <ElementType IdRef="ID1" />
+  </Function>
+  <Function Name="dbo.InsertSetting" Method="InsertSetting">
+    <Parameter Name="CompanyName" Parameter="companyName" Type="System.String" DbType="NVarChar(100)" />
+    <Parameter Name="FactorAddress" Parameter="factorAddress" Type="System.String" DbType="NVarChar(MAX)" />
+    <Parameter Name="FactorTel" Parameter="factorTel" Type="System.String" DbType="NVarChar(20)" />
+    <Parameter Name="InvoiceAddress" Parameter="invoiceAddress" Type="System.String" DbType="NVarChar(MAX)" />
+    <Parameter Name="InvoiceTel" Parameter="invoiceTel" Type="System.String" DbType="NVarChar(20)" />
+    <Parameter Name="SmsUser" Parameter="smsUser" Type="System.String" DbType="NVarChar(20)" />
+    <Parameter Name="SmsPass" Parameter="smsPass" Type="System.String" DbType="NVarChar(20)" />
+    <Parameter Name="SmsSender" Parameter="smsSender" Type="System.String" DbType="NVarChar(20)" />
+    <Parameter Name="UserMobile" Parameter="userMobile" Type="System.String" DbType="NVarChar(11)" />
+    <Parameter Name="Alarm1" Parameter="alarm1" Type="System.Int32" DbType="Int" />
+    <Parameter Name="Alarm2" Parameter="alarm2" Type="System.Int32" DbType="Int" />
+    <Parameter Name="BankSend" Parameter="bankSend" Type="System.Boolean" DbType="Bit" />
+    <Parameter Name="FactorSend" Parameter="factorSend" Type="System.Boolean" DbType="Bit" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.UpdateSetting" Method="UpdateSetting">
+    <Parameter Name="CompanyName" Parameter="companyName" Type="System.String" DbType="NVarChar(100)" />
+    <Parameter Name="FactorAddress" Parameter="factorAddress" Type="System.String" DbType="NVarChar(MAX)" />
+    <Parameter Name="FactorTel" Parameter="factorTel" Type="System.String" DbType="NVarChar(20)" />
+    <Parameter Name="InvoiceAddress" Parameter="invoiceAddress" Type="System.String" DbType="NVarChar(MAX)" />
+    <Parameter Name="InvoiceTel" Parameter="invoiceTel" Type="System.String" DbType="NVarChar(20)" />
+    <Parameter Name="SmsUser" Parameter="smsUser" Type="System.String" DbType="NVarChar(20)" />
+    <Parameter Name="SmsPass" Parameter="smsPass" Type="System.String" DbType="NVarChar(20)" />
+    <Parameter Name="SmsSender" Parameter="smsSender" Type="System.String" DbType="NVarChar(20)" />
+    <Parameter Name="UserMobile" Parameter="userMobile" Type="System.String" DbType="NVarChar(11)" />
+    <Parameter Name="Alarm1" Parameter="alarm1" Type="System.Int32" DbType="Int" />
+    <Parameter Name="Alarm2" Parameter="alarm2" Type="System.Int32" DbType="Int" />
+    <Parameter Name="BankSend" Parameter="bankSend" Type="System.Boolean" DbType="Bit" />
+    <Parameter Name="FactorSend" Parameter="factorSend" Type="System.Boolean" DbType="Bit" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.DeleteRoles" Method="DeleteRoles">
+    <Parameter Name="RoleId" Parameter="roleId" Type="System.Int32" DbType="Int" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.ExistsRoles" Method="ExistsRoles">
+    <Parameter Name="Exist" Parameter="exist" Type="System.Boolean" DbType="Bit" Direction="InOut" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.FillRoles" Method="FillRoles">
+    <ElementType IdRef="ID2" />
+  </Function>
+  <Function Name="dbo.FillRolesById" Method="FillRolesById">
+    <Parameter Name="RoleId" Parameter="roleId" Type="System.Int32" DbType="Int" />
+    <ElementType IdRef="ID2" />
+  </Function>
+  <Function Name="dbo.InsertRoles" Method="InsertRoles">
+    <Parameter Name="Name" Parameter="name" Type="System.String" DbType="NVarChar(100)" />
+    <Parameter Name="Depot" Parameter="depot" Type="System.Boolean" DbType="Bit" />
+    <Parameter Name="Bank" Parameter="bank" Type="System.Boolean" DbType="Bit" />
+    <Parameter Name="Person" Parameter="person" Type="System.Boolean" DbType="Bit" />
+    <Parameter Name="Factor" Parameter="factor" Type="System.Boolean" DbType="Bit" />
+    <Parameter Name="Setting" Parameter="setting" Type="System.Boolean" DbType="Bit" />
+    <Parameter Name="User" Parameter="user" Type="System.Boolean" DbType="Bit" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.UpdateRoles" Method="UpdateRoles">
+    <Parameter Name="RoleId" Parameter="roleId" Type="System.Int32" DbType="Int" />
+    <Parameter Name="Name" Parameter="name" Type="System.String" DbType="NVarChar(100)" />
+    <Parameter Name="Depot" Parameter="depot" Type="System.Boolean" DbType="Bit" />
+    <Parameter Name="Bank" Parameter="bank" Type="System.Boolean" DbType="Bit" />
+    <Parameter Name="Person" Parameter="person" Type="System.Boolean" DbType="Bit" />
+    <Parameter Name="Factor" Parameter="factor" Type="System.Boolean" DbType="Bit" />
+    <Parameter Name="Setting" Parameter="setting" Type="System.Boolean" DbType="Bit" />
+    <Parameter Name="User" Parameter="user" Type="System.Boolean" DbType="Bit" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.ExistsUsers" Method="ExistsUsers">
+    <Parameter Name="Exist" Parameter="exist" Type="System.Boolean" DbType="Bit" Direction="InOut" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.DeleteUsers" Method="DeleteUsers">
+    <Parameter Name="UserId" Parameter="userId" Type="System.Int32" DbType="Int" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.FillUsers" Method="FillUsers">
+    <ElementType IdRef="ID3" />
+  </Function>
+  <Function Name="dbo.FillUsersById" Method="FillUsersById">
+    <Parameter Name="UserId" Parameter="userId" Type="System.Int32" DbType="Int" />
+    <ElementType IdRef="ID3" />
+  </Function>
+  <Function Name="dbo.InsertUsers" Method="InsertUsers">
+    <Parameter Name="RoleId" Parameter="roleId" Type="System.Int32" DbType="Int" />
+    <Parameter Name="User" Parameter="user" Type="System.String" DbType="NVarChar(20)" />
+    <Parameter Name="Pass" Parameter="pass" Type="System.String" DbType="NVarChar(20)" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.UpdateUsers" Method="UpdateUsers">
+    <Parameter Name="UserId" Parameter="userId" Type="System.Int32" DbType="Int" />
+    <Parameter Name="RoleId" Parameter="roleId" Type="System.Int32" DbType="Int" />
+    <Parameter Name="User" Parameter="user" Type="System.String" DbType="NVarChar(20)" />
+    <Parameter Name="Pass" Parameter="pass" Type="System.String" DbType="NVarChar(20)" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.CheckUsersName" Method="CheckUsersName">
+    <Parameter Name="Check" Parameter="check" Type="System.Boolean" DbType="Bit" Direction="InOut" />
+    <Parameter Name="Name" Parameter="name" Type="System.String" DbType="NVarChar(20)" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.CheckUserPass" Method="CheckUserPass">
+    <Parameter Name="Check" Parameter="check" Type="System.Boolean" DbType="Bit" Direction="InOut" />
+    <Parameter Name="Pass" Parameter="pass" Type="System.String" DbType="NVarChar(20)" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.GetLoginId" Method="GetLoginId">
+    <Parameter Name="Id" Parameter="id" Type="System.Int32" DbType="Int" Direction="InOut" />
+    <Parameter Name="Name" Parameter="name" Type="System.String" DbType="NVarChar(20)" />
+    <Parameter Name="Pass" Parameter="pass" Type="System.String" DbType="NVarChar(20)" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.UpdateLoginPass" Method="UpdateLoginPass">
+    <Parameter Name="Id" Parameter="id" Type="System.Int32" DbType="Int" />
+    <Parameter Name="Pass" Parameter="pass" Type="System.String" DbType="NVarChar(20)" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.CheckLoginPassById" Method="CheckLoginPassById">
+    <Parameter Name="Id" Parameter="id" Type="System.Int32" DbType="Int" />
+    <Parameter Name="Pass" Parameter="pass" Type="System.String" DbType="NVarChar(20)" />
+    <Parameter Name="Check" Parameter="check" Type="System.Boolean" DbType="Bit" Direction="InOut" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.GetUserPermission" Method="GetUserPermission">
+    <Parameter Name="UserId" Parameter="userId" Type="System.Int32" DbType="Int" />
+    <Parameter Name="Depot" Parameter="depot" Type="System.Boolean" DbType="Bit" Direction="InOut" />
+    <Parameter Name="Bank" Parameter="bank" Type="System.Boolean" DbType="Bit" Direction="InOut" />
+    <Parameter Name="Factor" Parameter="factor" Type="System.Boolean" DbType="Bit" Direction="InOut" />
+    <Parameter Name="Person" Parameter="person" Type="System.Boolean" DbType="Bit" Direction="InOut" />
+    <Parameter Name="Setting" Parameter="setting" Type="System.Boolean" DbType="Bit" Direction="InOut" />
+    <Parameter Name="User" Parameter="user" Type="System.Boolean" DbType="Bit" Direction="InOut" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.InsertLogs" Method="InsertLogs">
+    <Parameter Name="UserId" Parameter="userId" Type="System.Int32" DbType="Int" />
+    <Parameter Name="LogIn" Parameter="logIn" Type="System.String" DbType="NVarChar(30)" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.UpdateLogs" Method="UpdateLogs">
+    <Parameter Name="LogId" Parameter="logId" Type="System.Int32" DbType="Int" />
+    <Parameter Name="LogOut" Parameter="logOut" Type="System.String" DbType="NVarChar(30)" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.GetLogId" Method="GetLogId">
+    <Parameter Name="LogId" Parameter="logId" Type="System.Int32" DbType="Int" Direction="InOut" />
+    <Parameter Name="UserId" Parameter="userId" Type="System.Int32" DbType="Int" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.FillLogs" Method="FillLogs">
+    <Parameter Name="UserId" Parameter="userId" Type="System.Int32" DbType="Int" />
+    <ElementType IdRef="ID4" />
+  </Function>
+  <Function Name="dbo.DeleteDepot" Method="DeleteDepot">
+    <Parameter Name="DepotId" Parameter="depotId" Type="System.Int32" DbType="Int" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.InsertDepot" Method="InsertDepot">
+    <Parameter Name="DepotName" Parameter="depotName" Type="System.String" DbType="NVarChar(100)" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.UpdateDepot" Method="UpdateDepot">
+    <Parameter Name="DepotId" Parameter="depotId" Type="System.Int32" DbType="Int" />
+    <Parameter Name="DepotName" Parameter="depotName" Type="System.String" DbType="NVarChar(100)" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.FillDepot" Method="FillDepot">
+    <ElementType IdRef="ID5" />
+  </Function>
+  <Function Name="dbo.FillDepotById" Method="FillDepotById">
+    <Parameter Name="DepotId" Parameter="depotId" Type="System.Int32" DbType="Int" />
+    <ElementType IdRef="ID5" />
+  </Function>
+  <Function Name="dbo.DeleteGroup" Method="DeleteGroup">
+    <Parameter Name="Id" Parameter="id" Type="System.Int32" DbType="Int" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.UpdateGroup" Method="UpdateGroup">
+    <Parameter Name="Id" Parameter="id" Type="System.Int32" DbType="Int" />
+    <Parameter Name="Name" Parameter="name" Type="System.String" DbType="NVarChar(100)" />
+    <Parameter Name="Unit1" Parameter="unit1" Type="System.String" DbType="NVarChar(30)" />
+    <Parameter Name="Unit2" Parameter="unit2" Type="System.String" DbType="NVarChar(30)" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.InsertGroup" Method="InsertGroup">
+    <Parameter Name="Name" Parameter="name" Type="System.String" DbType="NVarChar(100)" />
+    <Parameter Name="Unit1" Parameter="unit1" Type="System.String" DbType="NVarChar(30)" />
+    <Parameter Name="Unit2" Parameter="unit2" Type="System.String" DbType="NVarChar(30)" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.FillGroup" Method="FillGroup">
+    <ElementType IdRef="ID6" />
+  </Function>
+  <Function Name="dbo.FillGroupById" Method="FillGroupById">
+    <Parameter Name="Id" Parameter="id" Type="System.Int32" DbType="Int" />
+    <ElementType IdRef="ID6" />
+  </Function>
+  <Function Name="dbo.DeleteProduct" Method="DeleteProduct">
+    <Parameter Name="ProductId" Parameter="productId" Type="System.Int32" DbType="Int" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.FillProductById" Method="FillProductById">
+    <Parameter Name="ProductId" Parameter="productId" Type="System.Int32" DbType="Int" />
+    <ElementType IdRef="ID7" />
+  </Function>
+  <Function Name="dbo.FilterProduct" Method="FilterProduct">
+    <Parameter Name="ProductName" Parameter="productName" Type="System.String" DbType="NVarChar(200)" />
+    <ElementType IdRef="ID7" />
+  </Function>
+  <Function Name="dbo.FilterProductByGroup" Method="FilterProductByGroup">
+    <Parameter Name="GroupId" Parameter="groupId" Type="System.Int32" DbType="Int" />
+    <Parameter Name="ProductName" Parameter="productName" Type="System.String" DbType="NVarChar(200)" />
+    <ElementType IdRef="ID7" />
+  </Function>
+  <Function Name="dbo.InsertProduct" Method="InsertProduct">
+    <Parameter Name="GroupId" Parameter="groupId" Type="System.Int32" DbType="Int" />
+    <Parameter Name="ProductName" Parameter="productName" Type="System.String" DbType="NVarChar(200)" />
+    <Parameter Name="ProductSize" Parameter="productSize" Type="System.Double" DbType="Float" />
+    <Parameter Name="ProductPrice" Parameter="productPrice" Type="System.Int32" DbType="Int" />
+    <Parameter Name="ProductAlarm" Parameter="productAlarm" Type="System.Int32" DbType="Int" />
+    <Parameter Name="ProductDes" Parameter="productDes" Type="System.String" DbType="NVarChar(MAX)" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.UpdateProduct" Method="UpdateProduct">
+    <Parameter Name="ProductId" Parameter="productId" Type="System.Int32" DbType="Int" />
+    <Parameter Name="GroupId" Parameter="groupId" Type="System.Int32" DbType="Int" />
+    <Parameter Name="ProductName" Parameter="productName" Type="System.String" DbType="NVarChar(200)" />
+    <Parameter Name="ProductSize" Parameter="productSize" Type="System.Double" DbType="Float" />
+    <Parameter Name="ProductPrice" Parameter="productPrice" Type="System.Int32" DbType="Int" />
+    <Parameter Name="ProductAlarm" Parameter="productAlarm" Type="System.Int32" DbType="Int" />
+    <Parameter Name="ProductDes" Parameter="productDes" Type="System.String" DbType="NVarChar(MAX)" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.DeletePerson" Method="DeletePerson">
+    <Parameter Name="PersonId" Parameter="personId" Type="System.Int32" DbType="Int" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.FillPersonById" Method="FillPersonById">
+    <Parameter Name="PersonId" Parameter="personId" Type="System.Int32" DbType="Int" />
+    <ElementType IdRef="ID8" />
+  </Function>
+  <Function Name="dbo.FilterPerson" Method="FilterPerson">
+    <Parameter Name="PersonName" Parameter="personName" Type="System.String" DbType="NVarChar(100)" />
+    <ElementType IdRef="ID8" />
+  </Function>
+  <Function Name="dbo.InsertPerson" Method="InsertPerson">
+    <Parameter Name="PersonName" Parameter="personName" Type="System.String" DbType="NVarChar(100)" />
+    <Parameter Name="PersonTel" Parameter="personTel" Type="System.String" DbType="NVarChar(20)" />
+    <Parameter Name="PersonMobile" Parameter="personMobile" Type="System.String" DbType="NVarChar(11)" />
+    <Parameter Name="PersonDebtor" Parameter="personDebtor" Type="System.Int32" DbType="Int" />
+    <Parameter Name="PersonCreditor" Parameter="personCreditor" Type="System.Int32" DbType="Int" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.UpdatePerson" Method="UpdatePerson">
+    <Parameter Name="PersonId" Parameter="personId" Type="System.Int32" DbType="Int" />
+    <Parameter Name="PersonName" Parameter="personName" Type="System.String" DbType="NVarChar(100)" />
+    <Parameter Name="PersonTel" Parameter="personTel" Type="System.String" DbType="NVarChar(20)" />
+    <Parameter Name="PersonMobile" Parameter="personMobile" Type="System.String" DbType="NVarChar(11)" />
+    <Parameter Name="PersonDebtor" Parameter="personDebtor" Type="System.Int32" DbType="Int" />
+    <Parameter Name="PersonCreditor" Parameter="personCreditor" Type="System.Int32" DbType="Int" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.DeleteCostGroup" Method="DeleteCostGroup">
+    <Parameter Name="Id" Parameter="id" Type="System.Int32" DbType="Int" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.FillCostGroupById" Method="FillCostGroupById">
+    <Parameter Name="Id" Parameter="id" Type="System.Int32" DbType="Int" />
+    <ElementType IdRef="ID9" />
+  </Function>
+  <Function Name="dbo.FillCostGroupType1" Method="FillCostGroupType1">
+    <ElementType IdRef="ID9" />
+  </Function>
+  <Function Name="dbo.FillCostGroupType2" Method="FillCostGroupType2">
+    <ElementType IdRef="ID9" />
+  </Function>
+  <Function Name="dbo.InsertCostGroup" Method="InsertCostGroup">
+    <Parameter Name="Type" Parameter="type" Type="System.Boolean" DbType="Bit" />
+    <Parameter Name="Static" Parameter="static" Type="System.Boolean" DbType="Bit" />
+    <Parameter Name="Name" Parameter="name" Type="System.String" DbType="NVarChar(100)" />
+    <Parameter Name="Des" Parameter="des" Type="System.String" DbType="NVarChar(MAX)" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.UpdateCostGroup" Method="UpdateCostGroup">
+    <Parameter Name="Id" Parameter="id" Type="System.Int32" DbType="Int" />
+    <Parameter Name="Type" Parameter="type" Type="System.Boolean" DbType="Bit" />
+    <Parameter Name="Static" Parameter="static" Type="System.Boolean" DbType="Bit" />
+    <Parameter Name="Name" Parameter="name" Type="System.String" DbType="NVarChar(100)" />
+    <Parameter Name="Des" Parameter="des" Type="System.String" DbType="NVarChar(MAX)" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.GetSmsSetting" Method="GetSmsSetting">
+    <Parameter Name="Username" Parameter="username" Type="System.String" DbType="NVarChar(20)" Direction="InOut" />
+    <Parameter Name="Password" Parameter="password" Type="System.String" DbType="NVarChar(20)" Direction="InOut" />
+    <Parameter Name="Sender" Parameter="sender" Type="System.String" DbType="NVarChar(20)" Direction="InOut" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.DeleteBank" Method="DeleteBank">
+    <Parameter Name="BankId" Parameter="bankId" Type="System.Int32" DbType="Int" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.FillBankById" Method="FillBankById">
+    <Parameter Name="BankId" Parameter="bankId" Type="System.Int32" DbType="Int" />
+    <ElementType IdRef="ID10" />
+  </Function>
+  <Function Name="dbo.FillBankType1" Method="FillBankType1">
+    <ElementType IdRef="ID10" />
+  </Function>
+  <Function Name="dbo.FillBankType2" Method="FillBankType2">
+    <ElementType IdRef="ID10" />
+  </Function>
+  <Function Name="dbo.InsertBank" Method="InsertBank">
+    <Parameter Name="Name" Parameter="name" Type="System.String" DbType="NVarChar(100)" />
+    <Parameter Name="Number" Parameter="number" Type="System.String" DbType="NVarChar(30)" />
+    <Parameter Name="Person" Parameter="person" Type="System.String" DbType="NVarChar(100)" />
+    <Parameter Name="Type" Parameter="type" Type="System.Boolean" DbType="Bit" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.UpdateBank" Method="UpdateBank">
+    <Parameter Name="BankId" Parameter="bankId" Type="System.Int32" DbType="Int" />
+    <Parameter Name="Name" Parameter="name" Type="System.String" DbType="NVarChar(100)" />
+    <Parameter Name="Number" Parameter="number" Type="System.String" DbType="NVarChar(30)" />
+    <Parameter Name="Person" Parameter="person" Type="System.String" DbType="NVarChar(100)" />
+    <Parameter Name="Type" Parameter="type" Type="System.Boolean" DbType="Bit" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.DeleteBook" Method="DeleteBook">
+    <Parameter Name="BookId" Parameter="bookId" Type="System.Int32" DbType="Int" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.FillBookById" Method="FillBookById">
+    <Parameter Name="BookId" Parameter="bookId" Type="System.Int32" DbType="Int" />
+    <ElementType IdRef="ID11" />
+  </Function>
+  <Function Name="dbo.FilterBookByDate" Method="FilterBookByDate">
+    <Parameter Name="BankId" Parameter="bankId" Type="System.Int32" DbType="Int" />
+    <Parameter Name="Date1" Parameter="date1" Type="System.String" DbType="NVarChar(10)" />
+    <Parameter Name="Date2" Parameter="date2" Type="System.String" DbType="NVarChar(10)" />
+    <ElementType IdRef="ID11" />
+  </Function>
+  <Function Name="dbo.InsertBook" Method="InsertBook">
+    <Parameter Name="BankId" Parameter="bankId" Type="System.Int32" DbType="Int" />
+    <Parameter Name="CostId" Parameter="costId" Type="System.Int32" DbType="Int" />
+    <Parameter Name="PersonId" Parameter="personId" Type="System.Int32" DbType="Int" />
+    <Parameter Name="Date" Parameter="date" Type="System.String" DbType="NVarChar(10)" />
+    <Parameter Name="Time" Parameter="time" Type="System.String" DbType="NVarChar(10)" />
+    <Parameter Name="Des" Parameter="des" Type="System.String" DbType="NVarChar(200)" />
+    <Parameter Name="Price" Parameter="price" Type="System.Int32" DbType="Int" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.UpdateBook" Method="UpdateBook">
+    <Parameter Name="BookId" Parameter="bookId" Type="System.Int32" DbType="Int" />
+    <Parameter Name="BankId" Parameter="bankId" Type="System.Int32" DbType="Int" />
+    <Parameter Name="CostId" Parameter="costId" Type="System.Int32" DbType="Int" />
+    <Parameter Name="PersonId" Parameter="personId" Type="System.Int32" DbType="Int" />
+    <Parameter Name="Date" Parameter="date" Type="System.String" DbType="NVarChar(10)" />
+    <Parameter Name="Time" Parameter="time" Type="System.String" DbType="NVarChar(10)" />
+    <Parameter Name="Des" Parameter="des" Type="System.String" DbType="NVarChar(200)" />
+    <Parameter Name="Price" Parameter="price" Type="System.Int32" DbType="Int" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.GetSumBook" Method="GetSumBook">
+    <Parameter Name="BankId" Parameter="bankId" Type="System.Int32" DbType="Int" />
+    <Parameter Name="Sum" Parameter="sum" Type="System.Int32" DbType="Int" Direction="InOut" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.FillCostGroup" Method="FillCostGroup">
+    <ElementType IdRef="ID9" />
+  </Function>
+  <Function Name="dbo.DeleteDocument" Method="DeleteDocument">
+    <Parameter Name="DocId" Parameter="docId" Type="System.Int32" DbType="Int" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.ExistsDocument" Method="ExistsDocument">
+    <Parameter Name="Number" Parameter="number" Type="System.String" DbType="NVarChar(30)" />
+    <Parameter Name="Exists" Parameter="exists" Type="System.Boolean" DbType="Bit" Direction="InOut" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.FillDocumentById" Method="FillDocumentById">
+    <Parameter Name="DocId" Parameter="docId" Type="System.Int32" DbType="Int" />
+    <ElementType IdRef="ID12" />
+  </Function>
+  <Function Name="dbo.FilterDocument1ByNumber" Method="FilterDocument1ByNumber">
+    <Parameter Name="Number" Parameter="number" Type="System.String" DbType="NVarChar(30)" />
+    <ElementType IdRef="ID12" />
+  </Function>
+  <Function Name="dbo.FilterDocument2ByNumber" Method="FilterDocument2ByNumber">
+    <Parameter Name="Number" Parameter="number" Type="System.String" DbType="NVarChar(30)" />
+    <ElementType IdRef="ID12" />
+  </Function>
+  <Function Name="dbo.InsertDocument" Method="InsertDocument">
+    <Parameter Name="BankId" Parameter="bankId" Type="System.Int32" DbType="Int" />
+    <Parameter Name="CostId" Parameter="costId" Type="System.Int32" DbType="Int" />
+    <Parameter Name="PersonId" Parameter="personId" Type="System.Int32" DbType="Int" />
+    <Parameter Name="Date1" Parameter="date1" Type="System.String" DbType="NVarChar(10)" />
+    <Parameter Name="Date2" Parameter="date2" Type="System.String" DbType="NVarChar(10)" />
+    <Parameter Name="Price" Parameter="price" Type="System.Int32" DbType="Int" />
+    <Parameter Name="Des" Parameter="des" Type="System.String" DbType="NVarChar(200)" />
+    <Parameter Name="Number" Parameter="number" Type="System.String" DbType="NVarChar(30)" />
+    <Parameter Name="Ok" Parameter="ok" Type="System.Boolean" DbType="Bit" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.UpdateDocument" Method="UpdateDocument">
+    <Parameter Name="DocId" Parameter="docId" Type="System.Int32" DbType="Int" />
+    <Parameter Name="BankId" Parameter="bankId" Type="System.Int32" DbType="Int" />
+    <Parameter Name="CostId" Parameter="costId" Type="System.Int32" DbType="Int" />
+    <Parameter Name="PersonId" Parameter="personId" Type="System.Int32" DbType="Int" />
+    <Parameter Name="Date1" Parameter="date1" Type="System.String" DbType="NVarChar(10)" />
+    <Parameter Name="Date2" Parameter="date2" Type="System.String" DbType="NVarChar(10)" />
+    <Parameter Name="Price" Parameter="price" Type="System.Int32" DbType="Int" />
+    <Parameter Name="Des" Parameter="des" Type="System.String" DbType="NVarChar(200)" />
+    <Parameter Name="Number" Parameter="number" Type="System.String" DbType="NVarChar(30)" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.UpdateDocumentPass" Method="UpdateDocumentPass">
+    <Parameter Name="DocId" Parameter="docId" Type="System.Int32" DbType="Int" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.FillTax" Method="FillTax">
+    <ElementType IdRef="ID13" />
+  </Function>
+  <Function Name="dbo.UpdateTax" Method="UpdateTax">
+    <Parameter Name="TaxBuy" Parameter="taxBuy" Type="System.Double" DbType="Float" />
+    <Parameter Name="TaxSale" Parameter="taxSale" Type="System.Double" DbType="Float" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.GetDebtorCreditor" Method="GetDebtorCreditor">
+    <Parameter Name="Debtor" Parameter="debtor" Type="System.Int32" DbType="Int" Direction="InOut" />
+    <Parameter Name="Creditor" Parameter="creditor" Type="System.Int32" DbType="Int" Direction="InOut" />
+    <Parameter Name="PersonId" Parameter="personId" Type="System.Int32" DbType="Int" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.UpdateDebtor" Method="UpdateDebtor">
+    <Parameter Name="Debtor" Parameter="debtor" Type="System.Int32" DbType="Int" />
+    <Parameter Name="PersonId" Parameter="personId" Type="System.Int32" DbType="Int" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.UpdateCreditor" Method="UpdateCreditor">
+    <Parameter Name="Creditor" Parameter="creditor" Type="System.Int32" DbType="Int" />
+    <Parameter Name="PersonId" Parameter="personId" Type="System.Int32" DbType="Int" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.InsertStock" Method="InsertStock">
+    <Parameter Name="FactorId" Parameter="factorId" Type="System.Int32" DbType="Int" />
+    <Parameter Name="DepotId" Parameter="depotId" Type="System.Int32" DbType="Int" />
+    <Parameter Name="ProductId" Parameter="productId" Type="System.Int32" DbType="Int" />
+    <Parameter Name="Date" Parameter="date" Type="System.String" DbType="NVarChar(10)" />
+    <Parameter Name="Des" Parameter="des" Type="System.String" DbType="NVarChar(100)" />
+    <Parameter Name="In" Parameter="in" Type="System.Int32" DbType="Int" />
+    <Parameter Name="Out" Parameter="out" Type="System.Int32" DbType="Int" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.FilterStock" Method="FilterStock">
+    <Parameter Name="DepotId" Parameter="depotId" Type="System.Int32" DbType="Int" />
+    <Parameter Name="ProductId" Parameter="productId" Type="System.Int32" DbType="Int" />
+    <ElementType IdRef="ID14" />
+  </Function>
+  <Function Name="dbo.FillDepotByProduct" Method="FillDepotByProduct">
+    <Parameter Name="ProductId" Parameter="productId" Type="System.Int32" DbType="Int" />
+    <ElementType IdRef="ID5" />
+  </Function>
+  <Function Name="dbo.FilterViewStock" Method="FilterViewStock">
+    <Parameter Name="Name" Parameter="name" Type="System.String" DbType="NVarChar(100)" />
+    <ElementType IdRef="ID15" />
+  </Function>
+  <Function Name="dbo.GetProductStockInDepot" Method="GetProductStockInDepot">
+    <Parameter Name="DepotId" Parameter="depotId" Type="System.Int32" DbType="Int" />
+    <Parameter Name="ProductId" Parameter="productId" Type="System.Int32" DbType="Int" />
+    <Parameter Name="Sum" Parameter="sum" Type="System.Int32" DbType="Int" Direction="InOut" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.FillStockAlarm" Method="FillStockAlarm">
+    <ElementType IdRef="ID15" />
+  </Function>
+  <Function Name="dbo.DeleteFactor" Method="DeleteFactor">
+    <Parameter Name="FactorId" Parameter="factorId" Type="System.Int32" DbType="Int" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.GetMaxFactorId" Method="GetMaxFactorId">
+    <Parameter Name="FactorId" Parameter="factorId" Type="System.Int32" DbType="Int" Direction="InOut" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.GetMaxSaleNumber" Method="GetMaxSaleNumber">
+    <Parameter Name="Number" Parameter="number" Type="System.String" DbType="NVarChar(10)" Direction="InOut" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.GetSettingFactorSend" Method="GetSettingFactorSend">
+    <Parameter Name="IsSend" Parameter="isSend" Type="System.Boolean" DbType="Bit" Direction="InOut" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.InsertDetail" Method="InsertDetail">
+    <Parameter Name="FactorId" Parameter="factorId" Type="System.Int32" DbType="Int" />
+    <Parameter Name="ProductId" Parameter="productId" Type="System.Int32" DbType="Int" />
+    <Parameter Name="DepotId" Parameter="depotId" Type="System.Int32" DbType="Int" />
+    <Parameter Name="Value1" Parameter="value1" Type="System.Double" DbType="Float" />
+    <Parameter Name="Value2" Parameter="value2" Type="System.Int32" DbType="Int" />
+    <Parameter Name="Default" Parameter="default" Type="System.Int32" DbType="Int" />
+    <Parameter Name="Price" Parameter="price" Type="System.Int32" DbType="Int" />
+    <Parameter Name="Exit" Parameter="exit" Type="System.Boolean" DbType="Bit" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.ExistSaleNumber" Method="ExistSaleNumber">
+    <Parameter Name="Exist" Parameter="exist" Type="System.Boolean" DbType="Bit" Direction="InOut" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.GetGroupUnit" Method="GetGroupUnit">
+    <Parameter Name="Unit1" Parameter="unit1" Type="System.String" DbType="NVarChar(20)" Direction="InOut" />
+    <Parameter Name="Unit2" Parameter="unit2" Type="System.String" DbType="NVarChar(20)" Direction="InOut" />
+    <Parameter Name="ProductId" Parameter="productId" Type="System.Int32" DbType="Int" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.GetDefaultTax" Method="GetDefaultTax">
+    <Parameter Name="SaleTax" Parameter="saleTax" Type="System.Double" DbType="Float" Direction="InOut" />
+    <Parameter Name="BuyTax" Parameter="buyTax" Type="System.Double" DbType="Float" Direction="InOut" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.InsertFactor" Method="InsertFactor">
+    <Parameter Name="PersonId" Parameter="personId" Type="System.Int32" DbType="Int" />
+    <Parameter Name="Number" Parameter="number" Type="System.String" DbType="NVarChar(10)" />
+    <Parameter Name="Date" Parameter="date" Type="System.String" DbType="NVarChar(10)" />
+    <Parameter Name="DefaultTax" Parameter="defaultTax" Type="System.Double" DbType="Float" />
+    <Parameter Name="FactorPrice" Parameter="factorPrice" Type="System.Int32" DbType="Int" />
+    <Parameter Name="TaxPrice" Parameter="taxPrice" Type="System.Int32" DbType="Int" />
+    <Parameter Name="SerPrice" Parameter="serPrice" Type="System.Int32" DbType="Int" />
+    <Parameter Name="CutPrice" Parameter="cutPrice" Type="System.Int32" DbType="Int" />
+    <Parameter Name="FactorType" Parameter="factorType" Type="System.Boolean" DbType="Bit" />
+    <Parameter Name="SumPrice" Parameter="sumPrice" Type="System.Int32" DbType="Int" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.FilterBuyByDate" Method="FilterBuyByDate">
+    <Parameter Name="Date1" Parameter="date1" Type="System.String" DbType="NVarChar(10)" />
+    <Parameter Name="Date2" Parameter="date2" Type="System.String" DbType="NVarChar(10)" />
+    <ElementType IdRef="ID16" />
+  </Function>
+  <Function Name="dbo.FilterSaleByDate" Method="FilterSaleByDate">
+    <Parameter Name="Date1" Parameter="date1" Type="System.String" DbType="NVarChar(10)" />
+    <Parameter Name="Date2" Parameter="date2" Type="System.String" DbType="NVarChar(10)" />
+    <ElementType IdRef="ID16" />
+  </Function>
+  <Function Name="dbo.FillViewFactorDetails" Method="FillViewFactorDetails">
+    <Parameter Name="FactorId" Parameter="factorId" Type="System.Int32" DbType="Int" />
+    <ElementType IdRef="ID17" />
+  </Function>
+  <Function Name="dbo.UpdateDetails" Method="UpdateDetails">
+    <Parameter Name="DetailId" Parameter="detailId" Type="System.Int32" DbType="Int" />
+    <Parameter Name="DepotId" Parameter="depotId" Type="System.Int32" DbType="Int" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.GetDefaultDepotId" Method="GetDefaultDepotId">
+    <Parameter Name="DepotId" Parameter="depotId" Type="System.Int32" DbType="Int" Direction="InOut" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.GetSettingAddress" Method="GetSettingAddress">
+    <Parameter Name="FactorAddress" Parameter="factorAddress" Type="System.String" DbType="NVarChar(MAX)" Direction="InOut" />
+    <Parameter Name="InvoiceAddress" Parameter="invoiceAddress" Type="System.String" DbType="NVarChar(MAX)" Direction="InOut" />
+    <Parameter Name="FactorTel" Parameter="factorTel" Type="System.String" DbType="NVarChar(20)" Direction="InOut" />
+    <Parameter Name="InvoiceTel" Parameter="invoiceTel" Type="System.String" DbType="NVarChar(20)" Direction="InOut" />
+    <Parameter Name="Company" Parameter="company" Type="System.String" DbType="NVarChar(100)" Direction="InOut" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.GetCostGroupStatus" Method="GetCostGroupStatus">
+    <Parameter Name="GroupStatus" Parameter="groupStatus" Type="System.Boolean" DbType="Bit" Direction="InOut" />
+    <Parameter Name="CostGroupId" Parameter="costGroupId" Type="System.Int32" DbType="Int" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.GetSettingBankSend" Method="GetSettingBankSend">
+    <Parameter Name="BankSend" Parameter="bankSend" Type="System.Boolean" DbType="Bit" Direction="InOut" />
+    <Parameter Name="Mobile" Parameter="mobile" Type="System.String" DbType="NVarChar(11)" Direction="InOut" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.GetBankNameById" Method="GetBankNameById">
+    <Parameter Name="BankId" Parameter="bankId" Type="System.Int32" DbType="Int" />
+    <Parameter Name="BankName" Parameter="bankName" Type="System.String" DbType="NVarChar(100)" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.FilterBookByPerson" Method="FilterBookByPerson">
+    <Parameter Name="PersonId" Parameter="personId" Type="System.Int32" DbType="Int" />
+    <ElementType IdRef="ID11" />
+  </Function>
+  <Function Name="dbo.FilterDocumentByPerson" Method="FilterDocumentByPerson">
+    <Parameter Name="PersonId" Parameter="personId" Type="System.Int32" DbType="Int" />
+    <ElementType IdRef="ID12" />
+  </Function>
+  <Function Name="dbo.FilterFactorByPerson" Method="FilterFactorByPerson">
+    <Parameter Name="PersonId" Parameter="personId" Type="System.Int32" DbType="Int" />
+    <ElementType IdRef="ID16" />
+  </Function>
+  <Function Name="dbo.GetSumBookByPerson" Method="GetSumBookByPerson">
+    <Parameter Name="PersonId" Parameter="personId" Type="System.Int32" DbType="Int" />
+    <Parameter Name="SumSale" Parameter="sumSale" Type="System.Int32" DbType="Int" Direction="InOut" />
+    <Parameter Name="SumBuy" Parameter="sumBuy" Type="System.Int32" DbType="Int" Direction="InOut" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.GetSumDocumentByPerson" Method="GetSumDocumentByPerson">
+    <Parameter Name="PersonId" Parameter="personId" Type="System.Int32" DbType="Int" />
+    <Parameter Name="SumSale" Parameter="sumSale" Type="System.Int32" DbType="Int" Direction="InOut" />
+    <Parameter Name="SumBuy" Parameter="sumBuy" Type="System.Int32" DbType="Int" Direction="InOut" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.GetSumFactorByPerson" Method="GetSumFactorByPerson">
+    <Parameter Name="PersonId" Parameter="personId" Type="System.Int32" DbType="Int" />
+    <Parameter Name="SumSale" Parameter="sumSale" Type="System.Int32" DbType="Int" Direction="InOut" />
+    <Parameter Name="SumBuy" Parameter="sumBuy" Type="System.Int32" DbType="Int" Direction="InOut" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.DeleteMessage" Method="DeleteMessage">
+    <Parameter Name="Id" Parameter="id" Type="System.Int32" DbType="Int" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.FillMessage" Method="FillMessage">
+    <ElementType IdRef="ID18" />
+  </Function>
+  <Function Name="dbo.InsertMessage" Method="InsertMessage">
+    <Parameter Name="MessageText" Parameter="messageText" Type="System.String" DbType="NVarChar(MAX)" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.ExistsMessage" Method="ExistsMessage">
+    <Parameter Name="Exist" Parameter="exist" Type="System.Boolean" DbType="Bit" Direction="InOut" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.GetRandomMessage" Method="GetRandomMessage">
+    <Parameter Name="MessageText" Parameter="messageText" Type="System.String" DbType="NVarChar(MAX)" Direction="InOut" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.FilterSaleReport" Method="FilterSaleReport">
+    <Parameter Name="Date1" Parameter="date1" Type="System.String" DbType="NVarChar(10)" />
+    <Parameter Name="Date2" Parameter="date2" Type="System.String" DbType="NVarChar(10)" />
+    <ElementType IdRef="ID19" />
+  </Function>
+  <Function Name="dbo.FilterBuyReport" Method="FilterBuyReport">
+    <Parameter Name="Date1" Parameter="date1" Type="System.String" DbType="NVarChar(10)" />
+    <Parameter Name="Date2" Parameter="date2" Type="System.String" DbType="NVarChar(10)" />
+    <ElementType IdRef="ID19" />
+  </Function>
+  <Function Name="dbo.GetSumBuyReport" Method="GetSumBuyReport">
+    <Parameter Name="Date1" Parameter="date1" Type="System.String" DbType="NVarChar(10)" />
+    <Parameter Name="Date2" Parameter="date2" Type="System.String" DbType="NVarChar(10)" />
+    <Parameter Name="SumFactor" Parameter="sumFactor" Type="System.Int32" DbType="Int" Direction="InOut" />
+    <Parameter Name="SumBook" Parameter="sumBook" Type="System.Int32" DbType="Int" Direction="InOut" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.GetSumSaleReport" Method="GetSumSaleReport">
+    <Parameter Name="Date1" Parameter="date1" Type="System.String" DbType="NVarChar(10)" />
+    <Parameter Name="Date2" Parameter="date2" Type="System.String" DbType="NVarChar(10)" />
+    <Parameter Name="SumFactor" Parameter="sumFactor" Type="System.Int32" DbType="Int" Direction="InOut" />
+    <Parameter Name="SumBook" Parameter="sumBook" Type="System.Int32" DbType="Int" Direction="InOut" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.GetMoenyReportByDate" Method="GetMoenyReportByDate">
+    <Parameter Name="Cost1" Parameter="cost1" Type="System.Int32" DbType="Int" Direction="InOut" />
+    <Parameter Name="Cost2" Parameter="cost2" Type="System.Int32" DbType="Int" Direction="InOut" />
+    <Parameter Name="Sale" Parameter="sale" Type="System.Int32" DbType="Int" Direction="InOut" />
+    <Parameter Name="Buy" Parameter="buy" Type="System.Int32" DbType="Int" Direction="InOut" />
+    <Parameter Name="Doc1" Parameter="doc1" Type="System.Int32" DbType="Int" Direction="InOut" />
+    <Parameter Name="Doc2" Parameter="doc2" Type="System.Int32" DbType="Int" Direction="InOut" />
+    <Parameter Name="Date1" Parameter="date1" Type="System.String" DbType="NVarChar(10)" />
+    <Parameter Name="Date2" Parameter="date2" Type="System.String" DbType="NVarChar(10)" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.GetMoenyReportByYear" Method="GetMoenyReportByYear">
+    <Parameter Name="Cost1" Parameter="cost1" Type="System.Int32" DbType="Int" Direction="InOut" />
+    <Parameter Name="Cost2" Parameter="cost2" Type="System.Int32" DbType="Int" Direction="InOut" />
+    <Parameter Name="Sale" Parameter="sale" Type="System.Int32" DbType="Int" Direction="InOut" />
+    <Parameter Name="Buy" Parameter="buy" Type="System.Int32" DbType="Int" Direction="InOut" />
+    <Parameter Name="Doc1" Parameter="doc1" Type="System.Int32" DbType="Int" Direction="InOut" />
+    <Parameter Name="Doc2" Parameter="doc2" Type="System.Int32" DbType="Int" Direction="InOut" />
+    <Parameter Name="Year" Parameter="year" Type="System.String" DbType="NVarChar(4)" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.AlarmDocument" Method="AlarmDocument">
+    <Parameter Name="Today" Parameter="today" Type="System.String" DbType="NVarChar(10)" />
+    <Parameter Name="Az" Parameter="az" Type="System.Int32" DbType="Int" />
+    <Parameter Name="Ta" Parameter="ta" Type="System.Int32" DbType="Int" />
+    <ElementType IdRef="ID12" />
+  </Function>
+  <Function Name="dbo.GetAlarmSetting" Method="GetAlarmSetting">
+    <Parameter Name="Alm1" Parameter="alm1" Type="System.Int32" DbType="Int" Direction="InOut" />
+    <Parameter Name="Alm2" Parameter="alm2" Type="System.Int32" DbType="Int" Direction="InOut" />
+    <Return Type="System.Int32" />
+  </Function>
+</Database>
